@@ -582,6 +582,7 @@ header.scrolled {
    MOBILE NAV OVERLAY — พื้นหลังมืด + Panel เมนู
    ============================================================ */
 .mobile-nav-overlay {
+  display: none;              /* ซ่อนจาก DOM และ Flow ทั้งหมดเด็ดขาด */
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -589,12 +590,11 @@ header.scrolled {
   z-index: 2000;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  visibility: hidden;   /* ซ่อนไว้ก่อน */
   opacity: 0;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 .mobile-nav-overlay.open {
-  visibility: visible;
+  display: flex;              /* แสดงเฉพาะเมื่อสั่งเปิดในมือถือ */
   opacity: 1;
 }
 
@@ -704,11 +704,14 @@ header.scrolled {
   flex-shrink: 0;
 }
 
-/* แสดง hamburger และซ่อน desktop nav บน Mobile */
-@media (max-width: 768px) {
-  .hamburger-btn { display: flex; }
-  header nav    { display: none; }
-  /* ปรับ header ให้ logo + hamburger อยู่แถวเดียวกัน */
+/* แสดง hamburger และซ่อน desktop nav บน Mobile / Tablet ( <= 900px ) */
+@media (max-width: 900px) {
+  .hamburger-btn {
+    display: flex !important;
+  }
+  header nav {
+    display: none !important;
+  }
   header {
     flex-direction: row !important;
     gap: 0 !important;
@@ -717,6 +720,17 @@ header.scrolled {
     padding: 12px 20px !important;
   }
 }
+
+/* บนจอ Desktop ใหญ่ ( > 900px ) ซ่อน Mobile Nav Overlay และ Hamburger */
+@media (min-width: 901px) {
+  .mobile-nav-overlay,
+  .mobile-nav-overlay.open,
+  .hamburger-btn {
+    display: none !important;
+  }
+}
+
+
 
 /* ============================================================
    SCROLL ANIMATIONS — fade-in + slide-up เมื่อ scroll

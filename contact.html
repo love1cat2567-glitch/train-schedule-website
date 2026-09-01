@@ -9,18 +9,10 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- โหลด Supabase Client Library (JS SDK v2) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
-    /* ============================================================
-       สไตล์เพิ่มเติมสำหรับฟอร์มที่ส่งข้อมูลจริง
-       ============================================================ */
-
     /* ข้อความแจ้งสถานะ success / error */
     .form-alert {
       display: none;
-      /* ซ่อนไว้ก่อน แสดงเมื่อส่งฟอร์มแล้ว */
       padding: 15px 20px;
       border-radius: 8px;
       margin-bottom: 15px;
@@ -40,19 +32,16 @@
       border: 1px solid #f5c6cb;
     }
 
-    /* ปุ่มขณะกำลังส่ง — ทำให้ดูเป็น loading */
     .btn-submit:disabled {
       opacity: 0.7;
       cursor: not-allowed;
     }
 
-    /* required field marker */
     .required-mark {
       color: #831b2d;
       margin-left: 3px;
     }
 
-    /* Label style ชัดขึ้น */
     .contact-form label {
       font-weight: 600;
     }
@@ -83,11 +72,10 @@
   <main>
     <div class="contact-container">
 
-      <!-- ===== คอลัมน์ซ้าย: ข้อมูลติดต่อ ===== -->
+      <!-- ข้อมูลติดต่อด่วน -->
       <div class="contact-left">
         <h2 style="margin-bottom: 20px;">ข้อมูลติดต่อด่วน</h2>
 
-        <!-- โทรศัพท์ -->
         <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
           <div>
@@ -96,7 +84,6 @@
           </div>
         </div>
 
-        <!-- อีเมล -->
         <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
           <div>
@@ -105,7 +92,6 @@
           </div>
         </div>
 
-        <!-- Facebook -->
         <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-brands fa-facebook-f"></i></div>
           <div>
@@ -114,7 +100,6 @@
           </div>
         </div>
 
-        <!-- LINE -->
         <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-brands fa-line"></i></div>
           <div>
@@ -123,7 +108,6 @@
           </div>
         </div>
 
-        <!-- Instagram -->
         <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-brands fa-instagram"></i></div>
           <div>
@@ -133,34 +117,29 @@
         </div>
       </div>
 
-      <!-- ===== คอลัมน์ขวา: ฟอร์มส่งข้อความ (เชื่อมกับ Supabase Database) ===== -->
+      <!-- ฟอร์มส่งข้อความ -->
       <div class="contact-right">
         <h2 style="margin-bottom: 20px;">ฟอร์มส่งข้อความ / ฟีดแบค</h2>
 
-        <!-- ข้อความแจ้งผล (ซ่อนไว้ก่อน) -->
         <div id="formAlert" class="form-alert"></div>
 
         <form class="contact-form" id="contactForm">
 
-          <!-- ชื่อ (บังคับ) -->
           <label>
             ชื่อ-นามสกุล
             <span class="required-mark">*</span>
           </label>
           <input type="text" id="inputName" placeholder="กรอกชื่อ-นามสกุลของท่าน" required>
 
-          <!-- อีเมล (บังคับ) -->
           <label>
             อีเมล
             <span class="required-mark">*</span>
           </label>
           <input type="email" id="inputEmail" placeholder="example@email.com" required>
 
-          <!-- เบอร์โทร -->
           <label>เบอร์โทรศัพท์</label>
           <input type="text" id="inputPhone" placeholder="0XX-XXX-XXXX (ไม่บังคับ)">
 
-          <!-- หัวข้อ -->
           <label>
             เรื่องที่ต้องการติดต่อ
             <span class="required-mark">*</span>
@@ -168,7 +147,6 @@
           <textarea id="inputMessage" placeholder="อธิบายเรื่องที่ต้องการติดต่อ หรือให้ฟีดแบคเกี่ยวกับเว็บไซต์..."
             required></textarea>
 
-          <!-- ปุ่มส่ง -->
           <button type="button" class="btn-submit" id="btnSubmit" onclick="submitFeedback()">
             <i class="fa-solid fa-paper-plane"></i> ส่งข้อความ
           </button>
@@ -211,104 +189,67 @@
     </div>
   </footer>
 
+  <!-- ===== SCRIPT ===== -->
   <script>
-    /* ============================================================
-       contact.js (inline) — ระบบส่งฟอร์มไปบันทึกใน Supabase Database
-       ============================================================
-       วิธีตั้งค่า Supabase:
-       1. สร้าง Project ใน Supabase Dashboard
-       2. คัดลอก Project URL และ anon / public Key มาใส่ด้านล่าง
-       3. ดูวิธีตั้งค่าตาราง feedbacks ได้ที่ไฟล์ SETUP_SUPABASE.md
-       ============================================================ */
-
-    /**
-     * ตั้งค่า Supabase API Key (ต้องนำค่านำมาจาก Supabase Dashboard -> Project Settings -> API)
-     */
-    const SUPABASE_URL = 'https://gjljbgxrvtvloavzpvnz.supabase.co';
+    const SUPABASE_URL = 'https://gjkjbgxrvtvloavzpvnz.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_JWrXjFuBpPdSmb9jvADDeQ_NWhSu2W6';
 
-    // สร้าง Supabase client instance
-    let supabaseClient = null;
-    if (typeof supabase !== 'undefined' && SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE') {
-      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    }
-
-    /**
-     * ฟังก์ชันส่งฟอร์ม — เรียกเมื่อกดปุ่ม "ส่งข้อความ"
-     */
     async function submitFeedback() {
-      /* -- ดึงค่าจากฟอร์ม -- */
       const name = document.getElementById('inputName').value.trim();
       const email = document.getElementById('inputEmail').value.trim();
       const phone = document.getElementById('inputPhone').value.trim();
       const message = document.getElementById('inputMessage').value.trim();
 
-      /* -- Validation: ตรวจสอบช่องที่บังคับกรอก -- */
       if (!name || !email || !message) {
-        showAlert('กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบ', 'error');
+        showAlert('กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบถ้วน', 'error');
         return;
       }
 
-      /* -- Validation: ตรวจสอบรูปแบบอีเมล -- */
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(email)) {
         showAlert('รูปแบบอีเมลไม่ถูกต้อง', 'error');
         return;
       }
 
-      /* -- ตรวจสอบว่าตั้งค่า Supabase URL และ Key หรือยัง -- */
-      if (SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE' || !supabaseClient) {
-        /* กรณียังไม่ได้ใส่ Key — แสดง Demo Mode */
-        console.log('=== ข้อมูลฟีดแบค (ยังไม่ได้ตั้งค่า Supabase Keys) ===');
-        console.log({ name, email, phone, message });
-        showAlert(
-          '✅ รับข้อมูลแล้ว! (Demo Mode — ยังไม่ได้ตั้งค่า Supabase URL & Key)\n' +
-          'ดูวิธีตั้งค่า Supabase ได้ที่ไฟล์ SETUP_SUPABASE.md',
-          'success'
-        );
-        resetForm();
-        return;
-      }
-
-      /* -- เปลี่ยนปุ่มเป็น Loading state -- */
       const btn = document.getElementById('btnSubmit');
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่ง...';
 
       try {
-        // ส่งข้อมูลเข้าตาราง `feedbacks` ใน Supabase
-        const { data, error } = await supabaseClient
-          .from('feedbacks')
-          .insert([
-            {
-              name: name,
-              email: email,
-              phone: phone || null,
-              message: message
-            }
-          ]);
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/feedbacks`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone || null,
+            message: message
+          })
+        });
 
-        if (error) {
-          throw error;
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(errText);
         }
 
-        /* ส่งสำเร็จ */
-        showAlert('✅ ส่งข้อความสำเร็จ! ข้อมูลถูกบันทึกลงระบบ Supabase เรียบร้อยแล้ว', 'success');
+        alert('✅ ส่งข้อความสำเร็จ!\nข้อมูลถูกบันทึกลงฐานข้อมูล Supabase แล้ว');
+        showAlert('✅ ส่งข้อความสำเร็จ! ข้อมูลถูกบันทึกเรียบร้อยแล้ว', 'success');
         resetForm();
 
       } catch (err) {
-        console.error('Supabase Error:', err);
-        showAlert('❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + (err.message || 'โปรดลองใหม่อีกครั้ง'), 'error');
+        console.error('Supabase REST Error:', err);
+        showAlert('❌ เกิดข้อผิดพลาด: ' + err.message, 'error');
       } finally {
-        /* คืนสถานะปุ่มกลับมาปกติ */
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ส่งข้อความ';
       }
     }
 
-    /**
-     * แสดงข้อความแจ้งผล (success หรือ error)
-     */
     function showAlert(msg, type) {
       const alertBox = document.getElementById('formAlert');
       alertBox.textContent = msg;
@@ -317,12 +258,9 @@
 
       setTimeout(function () {
         alertBox.style.display = 'none';
-      }, 6000);
+      }, 5000);
     }
 
-    /**
-     * ล้างข้อมูลในฟอร์มทั้งหมดหลังส่งสำเร็จ
-     */
     function resetForm() {
       document.getElementById('inputName').value = '';
       document.getElementById('inputEmail').value = '';
