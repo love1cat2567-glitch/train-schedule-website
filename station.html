@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RotFaiCheck - สถานีรถไฟ | ค้นหาขบวนรถตามสถานี</title>
+  <meta name="description" content="ค้นหาขบวนรถไฟและข้อมูลสิ่งอำนวยความสะดวกของแต่ละสถานีรถไฟในประเทศไทย">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-train-subway logo-icon"></i>
+      <span class="logo-text">RotFaiCheck</span>
+      <span class="logo-subtext">รถไฟเช็ค เช็ครอบรถไฟไทย</span>
+    </a>
+    <nav>
+      <a href="index.html">หน้าแรก</a>
+      <a href="schedule.html">ตารางเวลา</a>
+      <a href="station.html" class="active">สถานีรถไฟ</a>
+      <a href="fare.html">อัตราค่าโดยสาร</a>
+      <a href="contact.html">ติดต่อเรา</a>
+    </nav>
+  </header>
+
+  <!-- ===== HERO — กล่องค้นหาสถานี ===== -->
+  <section class="hero" style="background-image: url('shutterstock_2122662680_resize.jpg');">
+    <div class="search-box">
+      <h1 class="search-title" style="background-color: #ba324b;">
+        <i class="fa-solid fa-train"></i> สถานีรถไฟ
+      </h1>
+      <p style="margin-bottom: 15px;">โปรดเลือกสถานีที่ต้องการค้นหา</p>
+      <!-- ฟอร์มค้นหาสถานี -->
+      <form class="search-form" id="stationForm">
+        <div class="form-group">
+          <!-- Dropdown สถานีทั้งหมดจาก data.js -->
+          <select id="selectStation" style="text-align: center; font-size: 16px;">
+            <option value="">-- เลือกสถานีรถไฟ --</option>
+            <!-- JavaScript สร้าง options ให้อัตโนมัติ -->
+          </select>
+        </div>
+        <button type="button" class="btn-search" onclick="showStationInfo()">
+          <i class="fa-solid fa-magnifying-glass"></i> ค้นหา
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== MAIN — ผลการค้นหา ===== -->
+  <main>
+    <!-- แสดงวันที่ปัจจุบัน (Dynamic) -->
+    <div class="station-date" id="currentDate">
+      <!-- JavaScript จะใส่วันที่นี่ -->
+    </div>
+
+    <!-- ข้อมูลสถานี (แสดงเมื่อค้นหา) -->
+    <div id="stationInfoBox" style="display:none; max-width:1000px; margin: 0 auto 20px; background:#f0f7ff; border-radius:10px; padding:20px;">
+      <h2 id="stationInfoName" style="color:#0b457f; font-size:22px; margin-bottom:8px;"></h2>
+      <p id="stationInfoAddress" style="color:#555; font-size:14px; margin-bottom:10px;">
+        <i class="fa-solid fa-location-dot" style="color:#831b2d;"></i> <span></span>
+      </p>
+      <!-- สิ่งอำนวยความสะดวก -->
+      <div id="stationFacilities" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+    </div>
+
+    <!-- รายการขบวนรถที่ผ่านสถานีนี้ -->
+    <div class="train-list" id="trainList">
+      <!-- ข้อความต้อนรับก่อนค้นหา -->
+      <div id="stationWelcomeMsg" style="text-align:center; padding:60px 20px; color:#888;">
+        <i class="fa-solid fa-map-location-dot" style="font-size:48px; margin-bottom:16px; display:block; color:#ccc;"></i>
+        <p style="font-size:18px;">กรุณาเลือกสถานีแล้วกดปุ่ม "ค้นหา"</p>
+        <p style="font-size:14px; margin-top:8px;">ระบบจะแสดงขบวนรถทั้งหมดที่จอดที่สถานีนั้น</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-col">
+        <h3>ข้อมูลติดต่อ</h3>
+        <p>เลขที่ 1 ถ.รองเมือง แขวงรองเมือง ปทุมวัน กทม.10330</p>
+        <p>Call Center 1690</p>
+        <p>sarabanklang@railway.co.th</p>
+        <p>ละติจูด 13.7465123 ลองติจูด 100.5167476</p>
+      </div>
+      <div class="footer-col">
+        <h3>เมนูลัด</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">> หน้าแรก</a></li>
+          <li><a href="schedule.html">> ตารางเวลา</a></li>
+          <li><a href="station.html">> สถานีรถไฟ</a></li>
+          <li><a href="fare.html">> อัตราค่าโดยสาร</a></li>
+          <li><a href="contact.html">> ติดต่อเรา</a></li>
+        </ul>
+      </div>
+      <div class="footer-col" style="text-align: right;">
+        <p>ระบบนี้เป็นระบบเช็ครอบรถไฟ<br>เพื่ออำนวยความสะดวกในการเดินทาง</p>
+        <div class="call-center" style="justify-content: flex-end;">
+          <i class="fa-solid fa-phone-volume"></i> สายด่วนรถไฟ 1690
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2024 Rotfaicheck, All Rights Reserved.
+    </div>
+  </footer>
+
+  <!-- โหลดฐานข้อมูลสมมติ -->
+  <script src="data.js"></script>
+
+  <script>
+    /* ============================================================
+       station.js (inline) — ระบบแสดงข้อมูลสถานีและขบวนรถ
+       ============================================================ */
+
+    /**
+     * เมื่อหน้าโหลดเสร็จ:
+     * 1. แสดงวันที่ปัจจุบัน
+     * 2. สร้าง dropdown สถานีทั้งหมดจาก STATIONS
+     */
+    window.addEventListener('DOMContentLoaded', function () {
+      showCurrentDate();          // แสดงวันที่ปัจจุบัน
+      populateStationDropdown();  // สร้าง dropdown
+    });
+
+    /**
+     * แสดงวันที่ปัจจุบันในรูปแบบภาษาไทย
+     */
+    function showCurrentDate() {
+      const today = new Date();
+      const thDate = today.toLocaleDateString('th-TH', {
+        year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
+      });
+      document.getElementById('currentDate').textContent = `ขบวนรถออกวันที่ ${thDate}`;
+    }
+
+    /**
+     * สร้าง <option> ให้ dropdown จากข้อมูลสถานีทั้งหมด
+     * จัดกลุ่มตามภาค (region)
+     */
+    function populateStationDropdown() {
+      const sel = document.getElementById('selectStation');
+      STATIONS.forEach(function (station) {
+        const opt = document.createElement('option');
+        opt.value = station.id;
+        // แสดงชื่อสถานีพร้อมภาค เช่น "กรุงเทพอภิวัฒน์ (ภาคกลาง)"
+        opt.textContent = `${station.name} (${station.region})`;
+        sel.appendChild(opt);
+      });
+    }
+
+    /**
+     * แสดงข้อมูลสถานีและรายการขบวนรถที่จอด
+     * - ดึง station object จาก STATIONS
+     * - เรียก getTrainsByStation() จาก data.js
+     * - สร้าง train-card แต่ละขบวน
+     */
+    function showStationInfo() {
+      const stationId = document.getElementById('selectStation').value;
+      if (!stationId) {
+        alert('กรุณาเลือกสถานีรถไฟ');
+        return;
+      }
+
+      // หาข้อมูลสถานีจากฐานข้อมูล
+      const station = STATIONS.find(s => s.id === stationId);
+      if (!station) return;
+
+      // แสดงกล่องข้อมูลสถานี
+      const infoBox = document.getElementById('stationInfoBox');
+      infoBox.style.display = 'block';
+      document.getElementById('stationInfoName').textContent =
+        `🚉 สถานี${station.name}`;
+      document.getElementById('stationInfoAddress').querySelector('span').textContent =
+        station.address;
+
+      // แสดงสิ่งอำนวยความสะดวก
+      const facilDiv = document.getElementById('stationFacilities');
+      facilDiv.innerHTML = '';
+      station.facilities.forEach(function (fac) {
+        const span = document.createElement('span');
+        span.textContent = `✓ ${fac}`;
+        span.style.cssText = 'background:#831b2d; color:white; padding:4px 12px; border-radius:20px; font-size:13px;';
+        facilDiv.appendChild(span);
+      });
+
+      // ดึงขบวนรถที่จอดสถานีนี้
+      const trains = getTrainsByStation(stationId);
+
+      // เคลียร์รายการเก่า ซ่อน welcome message
+      const trainList = document.getElementById('trainList');
+      trainList.innerHTML = '';
+
+      if (trains.length === 0) {
+        // ไม่พบขบวนรถ
+        trainList.innerHTML = `
+          <div style="text-align:center; padding:40px; color:#888;">
+            <i class="fa-solid fa-circle-xmark" style="font-size:36px; margin-bottom:10px; display:block;"></i>
+            ไม่พบขบวนรถที่จอดสถานีนี้
+          </div>`;
+        return;
+      }
+
+      // วนลูปสร้าง train-card แต่ละขบวน
+      trains.forEach(function (train) {
+        // หาข้อมูลเวลาที่สถานีนี้
+        const stopInfo = train.stops.find(s => s.stationId === stationId);
+
+        const card = document.createElement('div');
+        card.className = 'train-card';
+        card.innerHTML = `
+          <!-- ป้ายประเภทและหมายเลขขบวน -->
+          <div class="train-type ${train.typeClass}">${train.type} ${train.number}</div>
+
+          <!-- เส้นทางต้นทาง -->
+          <div class="train-route">
+            <div>ต้นทาง</div>
+            <div class="train-route-name">${train.fromName}</div>
+          </div>
+
+          <!-- เส้นทางปลายทาง -->
+          <div class="train-route">
+            <div>ปลายทาง</div>
+            <div class="train-route-name">${train.toName}</div>
+          </div>
+
+          <!-- เวลาถึง/ออกที่สถานีนี้ -->
+          <div class="train-route">
+            <div>เวลาถึง/ออก</div>
+            <div class="train-route-name" style="font-size:16px;">
+              ${stopInfo ? stopInfo.arrive + ' / ' + stopInfo.depart : '-'}
+            </div>
+          </div>
+
+          <!-- สถานะขบวนรถ (สมมติเป็น "พร้อมให้บริการ" ทุกขบวน) -->
+          <div class="train-status-col">
+            <div class="train-status status-ready">พร้อมให้บริการ</div>
+          </div>
+        `;
+        trainList.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

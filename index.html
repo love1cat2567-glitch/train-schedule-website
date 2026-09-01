@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RotFaiCheck - หน้าแรก | ระบบเช็ครอบรถไฟไทย</title>
+  <meta name="description" content="RotFaiCheck ระบบตรวจสอบรอบรถไฟ ตารางเวลา สถานีรถไฟ และอัตราค่าโดยสารรถไฟไทย">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <!-- ===== HEADER / Navigation ===== -->
+  <header>
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-train-subway logo-icon"></i>
+      <span class="logo-text">RotFaiCheck</span>
+      <span class="logo-subtext">รถไฟเช็ค เช็ครอบรถไฟไทย</span>
+    </a>
+    <nav>
+      <a href="index.html" class="active">หน้าแรก</a>
+      <a href="schedule.html">ตารางเวลา</a>
+      <a href="station.html">สถานีรถไฟ</a>
+      <a href="fare.html">อัตราค่าโดยสาร</a>
+      <a href="contact.html">ติดต่อเรา</a>
+    </nav>
+  </header>
+
+  <!-- ===== HERO SECTION — กล่องค้นหารอบรถไฟ ===== -->
+  <section class="hero" style="background-image: url('shutterstock_2122662680_resize.jpg');">
+    <div class="search-box">
+      <h1 class="search-title"><i class="fa-solid fa-train"></i> ค้นหารอบรถไฟ</h1>
+      <!-- ฟอร์มค้นหา: เลือกสถานีต้นทาง ปลายทาง และวันเดินทาง -->
+      <form class="search-form" id="searchForm">
+        <div class="form-row">
+          <!-- Dropdown สถานีต้นทาง — ข้อมูลจาก data.js -->
+          <div class="form-group">
+            <select id="selectFrom">
+              <option value="">เลือกสถานีต้นทาง</option>
+              <!-- Options จะถูกสร้างโดย JavaScript ด้านล่าง -->
+            </select>
+          </div>
+          <!-- Dropdown สถานีปลายทาง -->
+          <div class="form-group">
+            <select id="selectTo">
+              <option value="">เลือกสถานีปลายทาง</option>
+            </select>
+          </div>
+        </div>
+        <!-- วันที่เดินทาง -->
+        <div class="form-group">
+          <input type="date" id="travelDate" placeholder="วันที่เดินทาง">
+        </div>
+        <!-- ปุ่มค้นหา -->
+        <button type="button" class="btn-search" id="btnSearch" onclick="doSearch()">
+          <i class="fa-solid fa-magnifying-glass"></i> ค้นหา
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== ผลการค้นหา (ซ่อนไว้จนกว่าจะค้นหา) ===== -->
+  <div id="searchResultSection" style="display:none;">
+    <main>
+      <div class="table-container">
+        <!-- หัวข้อผลการค้นหา -->
+        <div id="searchResultHeader" style="text-align:center; margin-bottom:20px;">
+          <h2 class="page-title" id="searchResultTitle"></h2>
+          <p id="searchResultDate" style="color:#666; font-size:14px;"></p>
+        </div>
+
+        <!-- ตารางผลการค้นหา -->
+        <table id="searchResultTable">
+          <thead>
+            <tr>
+              <th>ขบวน</th>
+              <th>ประเภท</th>
+              <th>เวลาออก</th>
+              <th>เวลาถึง</th>
+              <th>ดูตารางเวลา</th>
+            </tr>
+          </thead>
+          <tbody id="searchResultBody">
+            <!-- JavaScript จะเติมข้อมูลลงมาที่นี่ -->
+          </tbody>
+        </table>
+
+        <!-- ข้อความเมื่อไม่พบรถ -->
+        <div id="noResultMsg" style="display:none; text-align:center; padding:40px; color:#888;">
+          <i class="fa-solid fa-circle-xmark" style="font-size:40px; margin-bottom:10px; display:block;"></i>
+          ไม่พบขบวนรถในเส้นทางที่เลือก กรุณาเลือกสถานีใหม่
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== MAIN CONTENT — ข่าวประชาสัมพันธ์ ===== -->
+  <main id="mainContent">
+    <section class="news-section">
+      <h2>ข่าวประชาสัมพันธ์</h2>
+      <div class="news-grid">
+        <!-- ข่าวที่ 1 -->
+        <div class="news-card">
+          <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&q=80&w=800"
+            alt="ข่าวปิดเส้นทางคลองมะพลับ">
+          <div class="news-info">
+            <h3>ประกาศปิดเส้นทางระหว่างสถานี คลองมะพลับ-สวรรคโลก<br>(เป็นการชั่วคราว)</h3>
+            <p>เนื่องจากปรับปรุงก่อสร้างสะพานรถไฟ</p>
+          </div>
+        </div>
+        <!-- ข่าวที่ 2 -->
+        <div class="news-card">
+          <img src="images.jpg" alt="ข่าวปิดเส้นทางสายสุพรรณบุรี">
+          <div class="news-info">
+            <h3>ประกาศปิดเส้นทางสายสุพรรณบุรี<br>(เป็นการชั่วคราว)</h3>
+            <p>เพื่อเสริมความมั่นคงของสะพาน</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-col">
+        <h3>ข้อมูลติดต่อ</h3>
+        <p>เลขที่ 1 ถ.รองเมือง แขวงรองเมือง ปทุมวัน กทม.10330</p>
+        <p>Call Center 1690</p>
+        <p>sarabanklang@railway.co.th</p>
+        <p>ละติจูด 13.7465123 ลองติจูด 100.5167476</p>
+      </div>
+      <div class="footer-col">
+        <h3>เมนูลัด</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">> หน้าแรก</a></li>
+          <li><a href="schedule.html">> ตารางเวลา</a></li>
+          <li><a href="station.html">> สถานีรถไฟ</a></li>
+          <li><a href="fare.html">> อัตราค่าโดยสาร</a></li>
+          <li><a href="contact.html">> ติดต่อเรา</a></li>
+        </ul>
+      </div>
+      <div class="footer-col" style="text-align: right;">
+        <p>ระบบนี้เป็นระบบเช็ครอบรถไฟ<br>เพื่ออำนวยความสะดวกในการเดินทาง</p>
+        <div class="call-center" style="justify-content: flex-end;">
+          <i class="fa-solid fa-phone-volume"></i> สายด่วนรถไฟ 1690
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2024 Rotfaicheck, All Rights Reserved.
+    </div>
+  </footer>
+
+  <!-- ===== โหลดฐานข้อมูลสมมติ ===== -->
+  <script src="data.js"></script>
+
+  <script>
+    /* ============================================================
+       index.js (inline) — ระบบค้นหารอบรถไฟหน้าแรก
+       ============================================================ */
+
+    /**
+     * เมื่อหน้าเว็บโหลดเสร็จ: สร้าง dropdown จากข้อมูลสถานีใน data.js
+     * และตั้งค่าวันที่ default เป็นวันนี้
+     */
+    window.addEventListener('DOMContentLoaded', function () {
+      populateStationDropdowns();  // สร้าง dropdown สถานี
+      setDefaultDate();            // ตั้งวันที่เริ่มต้น
+    });
+
+    /**
+     * สร้าง <option> ใน dropdown ต้นทางและปลายทางจากข้อมูล STATIONS
+     */
+    function populateStationDropdowns() {
+      const fromSel = document.getElementById('selectFrom');
+      const toSel   = document.getElementById('selectTo');
+
+      // วนลูปสถานีทุกสถานีในฐานข้อมูล
+      STATIONS.forEach(function (station) {
+        // สร้าง option สำหรับสถานีต้นทาง
+        const optFrom = document.createElement('option');
+        optFrom.value = station.id;
+        optFrom.textContent = station.name;
+        fromSel.appendChild(optFrom);
+
+        // สร้าง option สำหรับสถานีปลายทาง
+        const optTo = document.createElement('option');
+        optTo.value = station.id;
+        optTo.textContent = station.name;
+        toSel.appendChild(optTo);
+      });
+    }
+
+    /**
+     * ตั้งค่าวันที่ default เป็นวันนี้
+     */
+    function setDefaultDate() {
+      const today = new Date();
+      const yyyy  = today.getFullYear();
+      const mm    = String(today.getMonth() + 1).padStart(2, '0');
+      const dd    = String(today.getDate()).padStart(2, '0');
+      document.getElementById('travelDate').value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    /**
+     * ฟังก์ชันหลัก: ค้นหารอบรถไฟเมื่อกดปุ่มค้นหา
+     * - ดึงค่าจาก dropdown
+     * - เรียก searchTrains() จาก data.js
+     * - แสดงผลในตาราง
+     */
+    function doSearch() {
+      const fromId   = document.getElementById('selectFrom').value;
+      const toId     = document.getElementById('selectTo').value;
+      const dateVal  = document.getElementById('travelDate').value;
+
+      // ตรวจสอบว่าเลือกสถานีครบหรือยัง
+      if (!fromId || !toId) {
+        alert('กรุณาเลือกสถานีต้นทางและปลายทาง');
+        return;
+      }
+      // ตรวจสอบว่าต้นทางและปลายทางต้องไม่ใช่สถานีเดียวกัน
+      if (fromId === toId) {
+        alert('สถานีต้นทางและปลายทางต้องไม่ใช่สถานีเดียวกัน');
+        return;
+      }
+
+      // เรียกฟังก์ชัน searchTrains() จาก data.js
+      const results = searchTrains(fromId, toId);
+
+      // แสดงส่วนผลการค้นหา
+      document.getElementById('searchResultSection').style.display = 'block';
+      // ซ่อนส่วนข่าวเดิม
+      document.getElementById('mainContent').style.display = 'none';
+
+      // หาชื่อสถานีเพื่อแสดงใน header
+      const fromName = STATIONS.find(s => s.id === fromId)?.name || '';
+      const toName   = STATIONS.find(s => s.id === toId)?.name   || '';
+
+      // แปลงวันที่เป็นรูปแบบภาษาไทย
+      const dateObj  = new Date(dateVal);
+      const thDate   = dateObj.toLocaleDateString('th-TH', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      // แสดงหัวข้อผลการค้นหา
+      document.getElementById('searchResultTitle').textContent =
+        `🚆 ${fromName} → ${toName}`;
+      document.getElementById('searchResultDate').textContent =
+        `วันเดินทาง: ${thDate} | พบ ${results.length} ขบวน`;
+
+      // เคลียร์ตารางผลเดิม
+      const tbody = document.getElementById('searchResultBody');
+      tbody.innerHTML = '';
+
+      if (results.length === 0) {
+        // ไม่พบขบวน
+        document.getElementById('searchResultTable').style.display = 'none';
+        document.getElementById('noResultMsg').style.display = 'block';
+      } else {
+        // พบขบวน: เติมข้อมูลลงตาราง
+        document.getElementById('searchResultTable').style.display = 'table';
+        document.getElementById('noResultMsg').style.display = 'none';
+
+        results.forEach(function (train) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><span class="train-badge-sm train-badge-${train.typeClass}">${train.type} ${train.number}</span></td>
+            <td>${train.type}</td>
+            <td><strong>${train.boardTime}</strong></td>
+            <td><strong>${train.alightTime}</strong></td>
+            <td>
+              <a href="schedule.html?id=${train.id}" class="btn-detail">
+                <i class="fa-solid fa-circle-info"></i> ดูตาราง
+              </a>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // เลื่อนหน้าไปที่ผลการค้นหา
+      document.getElementById('searchResultSection').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+
+</html>

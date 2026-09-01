@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RotFaiCheck - ตารางเวลา | ค้นหาขบวนรถไฟ</title>
+  <meta name="description" content="ค้นหาตารางเวลาขบวนรถไฟ รายละเอียดสถานีจอด เวลาออก-ถึงแต่ละสถานี">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-train-subway logo-icon"></i>
+      <span class="logo-text">RotFaiCheck</span>
+      <span class="logo-subtext">รถไฟเช็ค เช็ครอบรถไฟไทย</span>
+    </a>
+    <nav>
+      <a href="index.html">หน้าแรก</a>
+      <a href="schedule.html" class="active">ตารางเวลา</a>
+      <a href="station.html">สถานีรถไฟ</a>
+      <a href="fare.html">อัตราค่าโดยสาร</a>
+      <a href="contact.html">ติดต่อเรา</a>
+    </nav>
+  </header>
+
+  <!-- ===== HERO — กล่องค้นหาขบวนรถ ===== -->
+  <section class="hero" style="background-image: url('shutterstock_2122662680_resize.jpg');">
+    <div class="search-box">
+      <h1 class="search-title" style="background-color: #ba324b;">
+        <i class="fa-solid fa-train"></i> ขบวนรถไฟ
+      </h1>
+      <p style="margin-bottom: 15px;">โปรดเลือกขบวนที่ต้องการค้นหา</p>
+      <!-- ฟอร์มค้นหาขบวนรถไฟ -->
+      <form class="search-form" id="scheduleForm">
+        <div class="form-group">
+          <!-- Dropdown รายการขบวนรถทั้งหมดจาก data.js -->
+          <select id="selectTrain" style="text-align: center; font-size: 16px;">
+            <option value="">-- เลือกขบวนรถไฟ --</option>
+            <!-- JavaScript จะสร้าง options ให้อัตโนมัติ -->
+          </select>
+        </div>
+        <button type="button" class="btn-search" onclick="showSchedule()">
+          <i class="fa-solid fa-magnifying-glass"></i> ค้นหา
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== ผลการค้นหาตารางเวลา ===== -->
+  <main>
+    <div class="schedule-detail-container">
+
+      <!-- ส่วนแสดงตารางเวลา (ซ่อนก่อน แสดงเมื่อค้นหาแล้ว) -->
+      <div id="scheduleResult" style="display:none;">
+        <!-- ป้ายขบวนรถ -->
+        <div id="trainBadge" class="train-badge"></div>
+        <!-- ชื่อเส้นทาง -->
+        <h3 class="train-route-title" id="trainRoute"></h3>
+        <!-- วันที่ -->
+        <p class="train-date-subtitle" id="trainDateSubtitle"></p>
+
+        <!-- ตารางสถานีจอด -->
+        <table id="stopsTable">
+          <thead>
+            <tr>
+              <th>ลำดับ</th>
+              <th>สถานี</th>
+              <th>เวลาถึง</th>
+              <th>เวลาออก</th>
+              <th>หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody id="stopsBody">
+            <!-- JavaScript จะเติมข้อมูลที่นี่ -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ข้อความต้อนรับก่อนค้นหา -->
+      <div id="welcomeMsg" style="text-align:center; padding:60px 20px; color:#888;">
+        <i class="fa-solid fa-magnifying-glass" style="font-size:48px; margin-bottom:16px; display:block; color:#ccc;"></i>
+        <p style="font-size:18px;">กรุณาเลือกขบวนรถไฟแล้วกดปุ่ม "ค้นหา"</p>
+        <p style="font-size:14px; margin-top:8px;">ระบบจะแสดงตารางเวลาจอดทุกสถานีของขบวนที่เลือก</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-col">
+        <h3>ข้อมูลติดต่อ</h3>
+        <p>เลขที่ 1 ถ.รองเมือง แขวงรองเมือง ปทุมวัน กทม.10330</p>
+        <p>Call Center 1690</p>
+        <p>sarabanklang@railway.co.th</p>
+        <p>ละติจูด 13.7465123 ลองติจูด 100.5167476</p>
+      </div>
+      <div class="footer-col">
+        <h3>เมนูลัด</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">> หน้าแรก</a></li>
+          <li><a href="schedule.html">> ตารางเวลา</a></li>
+          <li><a href="station.html">> สถานีรถไฟ</a></li>
+          <li><a href="fare.html">> อัตราค่าโดยสาร</a></li>
+          <li><a href="contact.html">> ติดต่อเรา</a></li>
+        </ul>
+      </div>
+      <div class="footer-col" style="text-align: right;">
+        <p>ระบบนี้เป็นระบบเช็ครอบรถไฟ<br>เพื่ออำนวยความสะดวกในการเดินทาง</p>
+        <div class="call-center" style="justify-content: flex-end;">
+          <i class="fa-solid fa-phone-volume"></i> สายด่วนรถไฟ 1690
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2024 Rotfaicheck, All Rights Reserved.
+    </div>
+  </footer>
+
+  <!-- โหลดข้อมูลสมมติจาก data.js -->
+  <script src="data.js"></script>
+
+  <script>
+    /* ============================================================
+       schedule.js (inline) — ระบบแสดงตารางเวลาขบวนรถ
+       ============================================================ */
+
+    /**
+     * เมื่อหน้าโหลดเสร็จ:
+     * 1. สร้าง dropdown รายการขบวนรถทั้งหมดจาก TRAINS
+     * 2. ตรวจสอบ query string ว่ามี ?id= หรือไม่
+     *    (ถ้ามาจากหน้าหลักที่กดปุ่ม "ดูตาราง" จะมี id ส่งมา)
+     */
+    window.addEventListener('DOMContentLoaded', function () {
+      populateTrainDropdown();   // สร้าง dropdown
+
+      // ตรวจสอบ URL parameter ?id=
+      const params  = new URLSearchParams(window.location.search);
+      const trainId = params.get('id');
+      if (trainId) {
+        // ตั้งค่า dropdown ให้ตรงกับขบวนที่ส่งมา แล้วแสดงตารางทันที
+        document.getElementById('selectTrain').value = trainId;
+        showSchedule();
+      }
+    });
+
+    /**
+     * สร้าง <option> ให้ dropdown จากข้อมูลขบวนรถทั้งหมด
+     */
+    function populateTrainDropdown() {
+      const sel = document.getElementById('selectTrain');
+      TRAINS.forEach(function (train) {
+        const opt = document.createElement('option');
+        opt.value = train.id;
+        // แสดงชื่อในรูปแบบ "ด่วนพิเศษ 7: กรุงเทพอภิวัฒน์ → เชียงใหม่"
+        opt.textContent = `${train.type} ${train.number}: ${train.fromName} → ${train.toName}`;
+        sel.appendChild(opt);
+      });
+    }
+
+    /**
+     * แสดงตารางเวลาของขบวนที่เลือก
+     * - หา train object จาก data.js
+     * - วนลูป stops แสดงในตาราง
+     */
+    function showSchedule() {
+      const trainId = document.getElementById('selectTrain').value;
+      if (!trainId) {
+        alert('กรุณาเลือกขบวนรถไฟ');
+        return;
+      }
+
+      // หาข้อมูลขบวนรถจากฐานข้อมูล
+      const train = getTrainById(trainId);
+      if (!train) {
+        alert('ไม่พบข้อมูลขบวนรถ');
+        return;
+      }
+
+      // แสดงส่วนผลการค้นหา ซ่อนข้อความต้อนรับ
+      document.getElementById('scheduleResult').style.display = 'block';
+      document.getElementById('welcomeMsg').style.display = 'none';
+
+      // แสดงป้ายขบวน ปรับสีตามประเภทรถ
+      const badge = document.getElementById('trainBadge');
+      badge.textContent = `${train.type} ${train.number}`;
+      badge.className = `train-badge badge-${train.typeClass}`; // class จาก style.css
+
+      // แสดงเส้นทาง
+      document.getElementById('trainRoute').textContent =
+        `${train.fromName} - ${train.toName}`;
+
+      // แสดงวันที่ปัจจุบัน (สมมติว่าค้นหาวันนี้)
+      const today = new Date();
+      const thDate = today.toLocaleDateString('th-TH', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+      document.getElementById('trainDateSubtitle').textContent =
+        `ตารางเวลาสำหรับขบวนรถออกต้นทางวันที่ ${thDate}`;
+
+      // เติมข้อมูลสถานีจอดในตาราง
+      const tbody = document.getElementById('stopsBody');
+      tbody.innerHTML = ''; // เคลียร์ข้อมูลเก่า
+
+      train.stops.forEach(function (stop, index) {
+        const tr = document.createElement('tr');
+        // ไฮไลต์สถานีต้นทางและปลายทาง
+        if (stop.note === 'ต้นทาง' || stop.note === 'ปลายทาง') {
+          tr.style.fontWeight = '600';
+          tr.style.backgroundColor = '#fff8e1';
+        }
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${stop.station}</td>
+          <td>${stop.arrive}</td>
+          <td>${stop.depart}</td>
+          <td style="color:#888; font-size:13px;">${stop.note}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>
