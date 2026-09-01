@@ -13,7 +13,7 @@
 
 ## 🎨 Figma Design
 
-**URL:** https://www.figma.com/design/Loc8X9oR0rieH0fdsnfS1J/Schedule-_%E0%B8%AB%E0%B8%99%E0%B9%89%E0%B8%B2%E0%B9%81%E0%B8%A3%E0%B8%81?node-id=0-1&t=unLM4pXa3xPYvJ4s-1
+**URL:** [วางลิงก์ Figma ต้นฉบับที่ตั้งค่า Public แล้วที่นี่]
 
 ---
 
@@ -40,7 +40,7 @@
 | **Assets** | Google Fonts (Kanit), Font Awesome 6.4.0 | Font ภาษาไทยและไอคอนทั้งหมด |
 | **Version Control** | Git และ GitHub | จัดเก็บโค้ดและติดตามประวัติการแก้ไข |
 | **Hosting** | GitHub Pages | Deploy เว็บไซต์แบบฟรี ไม่ต้องมี Server |
-| **AI Tools** | Gemini (Antigravity IDE) | ช่วยวางโครงสร้าง Mock Database และ JavaScript Logic |
+| **AI Tools** | Gemini (Antigravity IDE) | ช่วยวางโครงสร้าง Mock Database, JavaScript Logic และ Animation Code |
 | **Testing** | Chrome DevTools, Responsive Mode | ทดสอบ Responsive บน Desktop และ Mobile |
 
 ---
@@ -55,14 +55,17 @@
 | ตารางเวลา | `schedule.html` | แสดงตารางจอดทุกสถานีของขบวนที่เลือก |
 | สถานีรถไฟ | `station.html` | ค้นหาขบวนรถตามสถานีและสิ่งอำนวยความสะดวก |
 | อัตราค่าโดยสาร | `fare.html` | ตารางค่าโดยสารแยกชั้นที่นั่ง |
-| ติดต่อเรา | `contact.html` | ฟอร์มส่งข้อความ/ฟีดแบค เชื่อม Google Sheets |
+| ติดต่อเรา | `contact.html` | ฟอร์มส่งข้อความ/ฟีดแบค เชื่อม Supabase Database |
 
-### Interaction ที่มี (มากกว่า 2 รายการ)
+### Interaction ที่มี (มากกว่า 2 รายการ — เกินกำหนดของคำชี้แจง)
 
-1. **Form Validation** — ตรวจสอบความถูกต้องก่อนส่งฟอร์ม (contact.html)
-2. **Dynamic Search Results** — ผลการค้นหาแสดง/ซ่อนโดยไม่ต้อง Reload (index.html)
-3. **URL Parameter Passing** — ส่งค่า `?id=` ระหว่างหน้าเพื่อแสดงข้อมูลทันที
-4. **Loading State** — ปุ่มเปลี่ยนเป็น spinner ขณะกำลังส่งข้อมูล
+| # | ประเภท | รายละเอียด | ไฟล์ |
+|---|--------|---------|------|
+| 1 | **Mobile menu (Hamburger)** | ปุ่ม ☰ บนมือถือ เปิด panel จากขวา หมุน 3 ขีดเป็น × | ทุกหน้า |
+| 2 | **Scroll Animations** | Card/กล่อง/รูป fade-in + slide-up เมื่อ scroll ลงมา | ทุกหน้า |
+| 3 | **Form Validation** | ตรวจสอบ input + แสดง error/success ก่อนส่ง | contact.html |
+| 4 | **Dynamic Search Results** | ผลการค้นหาแสดง/ซ่อนโดยไม่ต้อง Reload | index.html |
+| 5 | **Header Sticky** | header ติดด้านบน + เงาปรากฏเมื่อ scroll | ทุกหน้า |
 
 ---
 
@@ -87,28 +90,6 @@
 --secondary-color: #2b4b39;  /* เขียวเข้ม — ปุ่มค้นหา */
 --text-dark:       #333333;  /* ข้อความหลัก */
 --bg-light:        #f5f5f5;  /* พื้นหลังอ่อน */
-```
-
----
-
-## 📁 โครงสร้างไฟล์ (File Structure)
-
-```
-RotFaiCheck/
-│
-├── index.html          # หน้าแรก — ระบบค้นหารอบรถไฟ
-├── schedule.html       # หน้าตารางเวลาขบวนรถ
-├── station.html        # หน้าสถานีรถไฟ
-├── fare.html           # หน้าอัตราค่าโดยสาร
-├── contact.html        # หน้าติดต่อเรา + ฟอร์มฟีดแบค
-│
-├── data.js             # Mock Database (สถานี 12 แห่ง + ขบวนรถ 8 ขบวน)
-├── style.css           # CSS Design System ทั้งระบบ
-├── README.md           # เอกสารอธิบายโปรเจกต์
-├── SETUP_GOOGLE_SHEETS.md  # คู่มือตั้งค่าฐานข้อมูลรับฟีดแบค
-│
-├── shutterstock_2122662680_resize.jpg  # ภาพพื้นหลัง Hero
-└── images.jpg          # ภาพประกอบข่าว
 ```
 
 ---
@@ -187,6 +168,9 @@ RotFaiCheck/
 **Prompt 3 — ระบบส่งฟอร์ม Google Sheets:**
 > *"เขียนฟังก์ชัน submitFeedback() สำหรับส่งข้อมูลฟอร์มไปยัง Google Apps Script ด้วย fetch() แบบ mode: no-cors พร้อม validation ก่อนส่ง และแสดง loading state บนปุ่มขณะกำลังส่ง"*
 
+**Prompt 4 — Hamburger Menu + Animations:**
+> *"สร้าง Hamburger Menu บนมือถือ ปุ่ม  3 ขีด animate กลายเป็น × Panel slide จากขวา backdrop blur และ Intersection Observer สำหรับ Scroll Animations แบบ stagger delay"*
+
 ### 4. ผลลัพธ์ที่ได้จาก AI
 
 | ฟังก์ชัน/ส่วน | ผลลัพธ์ที่ AI สร้าง |
@@ -196,6 +180,7 @@ RotFaiCheck/
 | `searchTrains()` | ฟังก์ชัน filter + findIndex ทำงานได้ถูกต้อง |
 | `populateStationDropdowns()` | ลูปสร้าง `<option>` จากข้อมูลจริง |
 | `submitFeedback()` | ระบบ fetch + validation + loading state |
+| `main.js` ทั้งไฟล์ | Hamburger menu + Intersection Observer + Parallax |
 
 ### 5. ส่วนที่แก้ไขเองหลังรับโค้ดจาก AI
 
@@ -204,6 +189,7 @@ RotFaiCheck/
 - เพิ่ม `note` ใน stops บางสถานีที่รถไม่จอด (เช่น `"ไม่จอด"`)
 - ปรับ CSS Color ให้ตรงกับ Design System ใน `style.css` เดิม
 - แก้ไข logic วันที่ให้ใช้ `th-TH` locale ถูกต้อง
+- ปรับ timing ของ CSS animation (เช่น `cubic-bezier`) ให้รู้สึกเป็นธรรมชาติมากขึ้น
 
 ### 6. การตรวจสอบความถูกต้องของผลลัพธ์
 
@@ -292,7 +278,6 @@ cd RotFaiCheck
 | Dropdown แสดงสถานีซ้ำสองครั้ง | `DOMContentLoaded` ถูกเรียกสองครั้ง | เช็ค `if` ก่อนสร้าง options ว่ายังว่างอยู่ | ต้องระวัง Event Listener ที่อาจ fire ซ้ำ |
 | Layout แตกบน Mobile | ใช้ fixed width แทน max-width | เปลี่ยนเป็น `max-width: 90%` และใช้ `flex-wrap` | ควร Design Mobile-first ตั้งแต่ต้น |
 | ตาราง Train Card ดูยากบนจอเล็ก | ข้อมูลหลายคอลัมน์ใน row เดียว | เพิ่ม `flex-direction: column` ใน Media Query | Responsive ต้องทดสอบบน Device จริง |
-
 
 ---
 

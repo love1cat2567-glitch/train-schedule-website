@@ -23,6 +23,12 @@
       <a href="fare.html">อัตราค่าโดยสาร</a>
       <a href="contact.html">ติดต่อเรา</a>
     </nav>
+    <!-- ปุ่ม Hamburger (3 ขีด) — แสดงเฉพาะบน Mobile -->
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="เปิดเมนู">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </header>
 
   <!-- ===== HERO — กล่องค้นหาสถานี ===== -->
@@ -108,8 +114,30 @@
     </div>
   </footer>
 
-  <!-- โหลดฐานข้อมูลสมมติ -->
+  <!-- ===== Mobile Nav Overlay ===== -->
+  <div class="mobile-nav-overlay" id="mobileNav">
+    <div class="mobile-nav-panel">
+      <div class="mobile-nav-header">
+        <div class="mobile-nav-header-logo">
+          <i class="fa-solid fa-train-subway"></i> RotFaiCheck
+        </div>
+        <button class="mobile-nav-close-btn" id="mobileNavClose">&times;</button>
+      </div>
+      <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-link"><i class="fa-solid fa-house"></i> หน้าแรก</a>
+        <a href="schedule.html" class="mobile-nav-link"><i class="fa-solid fa-calendar-days"></i> ตารางเวลา</a>
+        <a href="station.html" class="mobile-nav-link active"><i class="fa-solid fa-train-subway"></i> สถานีรถไฟ</a>
+        <a href="fare.html" class="mobile-nav-link"><i class="fa-solid fa-ticket"></i> อัตราค่าโดยสาร</a>
+        <a href="contact.html" class="mobile-nav-link"><i class="fa-solid fa-phone"></i> ติดต่อเรา</a>
+      </div>
+      <div class="mobile-nav-footer"><i class="fa-solid fa-phone-volume"></i> สายด่วนรถไฟ 1690</div>
+    </div>
+  </div>
+
+  <!-- โหลดข้อมูลสมมติ -->
   <script src="data.js"></script>
+  <!-- โหลด main.js (hamburger + animations) -->
+  <script src="main.js"></script>
 
   <script>
     /* ============================================================

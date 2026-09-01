@@ -518,3 +518,294 @@ tr:nth-child(even) {
   font-weight: 500;
   margin-bottom: 20px;
 }
+
+/* ============================================================
+   HEADER STICKY — ติดด้านบน + เงาเมื่อ scroll
+   ============================================================ */
+header {
+  transition: box-shadow 0.3s ease, padding 0.3s ease;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: white;
+}
+header.scrolled {
+  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ============================================================
+   HAMBURGER BUTTON — ปุ่ม 3 ขีด (มือถือเท่านั้น)
+   ============================================================ */
+.hamburger-btn {
+  display: none;            /* ซ่อนบน Desktop */
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  padding: 9px;
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.hamburger-btn:hover {
+  background-color: var(--primary-color);
+}
+/* 3 ขีดแนวนอน */
+.hamburger-btn span {
+  display: block;
+  width: 100%;
+  height: 2.5px;
+  background: var(--primary-color);
+  border-radius: 3px;
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity   0.25s ease,
+              background-color 0.3s ease;
+}
+.hamburger-btn:hover span {
+  background-color: white;
+}
+
+/* เมื่อ Active — 3 ขีด กลายเป็น × */
+.hamburger-btn.active {
+  background-color: var(--primary-color);
+}
+.hamburger-btn.active span       { background-color: white; }
+.hamburger-btn.active span:nth-child(1) { transform: translateY(8.5px) rotate(45deg); }
+.hamburger-btn.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger-btn.active span:nth-child(3) { transform: translateY(-8.5px) rotate(-45deg); }
+
+/* ============================================================
+   MOBILE NAV OVERLAY — พื้นหลังมืด + Panel เมนู
+   ============================================================ */
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  visibility: hidden;   /* ซ่อนไว้ก่อน */
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.mobile-nav-overlay.open {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Panel ที่ slide มาจากขวา */
+.mobile-nav-panel {
+  position: absolute;
+  top: 0; right: 0;
+  width: min(300px, 82vw);
+  height: 100%;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(110%);    /* เริ่มซ่อนออกนอกจอ */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+.mobile-nav-overlay.open .mobile-nav-panel {
+  transform: translateX(0);       /* Slide เข้ามา */
+}
+
+/* Header ภายใน Panel */
+.mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: var(--primary-color);
+  color: white;
+  flex-shrink: 0;
+}
+.mobile-nav-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.mobile-nav-header-logo i { font-size: 22px; }
+
+/* ปุ่มปิด × บน panel */
+.mobile-nav-close-btn {
+  width: 36px;
+  height: 36px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: transparent;
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.mobile-nav-close-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: white;
+}
+
+/* รายการลิงก์เมนูใน Panel */
+.mobile-nav-links {
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: background-color 0.25s, color 0.25s, transform 0.25s;
+}
+.mobile-nav-link i {
+  width: 22px;
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 16px;
+  transition: color 0.25s;
+}
+.mobile-nav-link:hover {
+  background-color: rgba(131, 27, 45, 0.08);
+  transform: translateX(5px);
+}
+.mobile-nav-link.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+.mobile-nav-link.active i { color: white; }
+
+/* Footer เบอร์โทรใน Panel */
+.mobile-nav-footer {
+  padding: 20px;
+  border-top: 1px solid #f0f0f0;
+  color: #888;
+  font-size: 13px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* แสดง hamburger และซ่อน desktop nav บน Mobile */
+@media (max-width: 768px) {
+  .hamburger-btn { display: flex; }
+  header nav    { display: none; }
+  /* ปรับ header ให้ logo + hamburger อยู่แถวเดียวกัน */
+  header {
+    flex-direction: row !important;
+    gap: 0 !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 12px 20px !important;
+  }
+}
+
+/* ============================================================
+   SCROLL ANIMATIONS — fade-in + slide-up เมื่อ scroll
+   ============================================================ */
+
+/* State เริ่มต้น: ซ่อน */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+/* เมื่อเข้า viewport: แสดง */
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delay — element ถัดไปช้าขึ้น 120ms */
+.animate-on-scroll:nth-child(2) { transition-delay: 0.12s; }
+.animate-on-scroll:nth-child(3) { transition-delay: 0.24s; }
+.animate-on-scroll:nth-child(4) { transition-delay: 0.36s; }
+.animate-on-scroll:nth-child(5) { transition-delay: 0.48s; }
+
+/* ============================================================
+   ENHANCED HOVER EFFECTS — micro-animations บน Card และปุ่ม
+   ============================================================ */
+
+/* News Card lift on hover */
+.news-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 10px;
+}
+.news-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Train Card lift on hover */
+.train-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s;
+}
+.train-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  background-color: #d5d5d5;
+}
+
+/* Contact Box slide on hover */
+.contact-box {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.contact-box:hover {
+  transform: translateX(6px);
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================
+   BUTTON ANIMATIONS
+   ============================================================ */
+.btn-search {
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+.btn-search:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(43, 75, 57, 0.4);
+}
+.btn-search:active { transform: translateY(0); box-shadow: none; }
+
+.btn-submit {
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+.btn-submit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(43, 58, 92, 0.4);
+}
+
+/* Table row highlight on hover */
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+tbody tr:hover {
+  background-color: #fff0f2 !important;
+}
+
+/* Search box entrance animation เมื่อหน้าโหลด */
+@keyframes searchBoxEntrance {
+  from { opacity: 0; transform: translateY(-20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+.search-box {
+  animation: searchBoxEntrance 0.6s ease forwards;
+}

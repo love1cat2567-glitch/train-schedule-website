@@ -25,6 +25,12 @@
       <a href="fare.html">อัตราค่าโดยสาร</a>
       <a href="contact.html">ติดต่อเรา</a>
     </nav>
+    <!-- ปุ่ม Hamburger (3 ขีด) — แสดงเฉพาะบน Mobile -->
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="เปิดเมนู">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </header>
 
   <!-- ===== HERO SECTION — กล่องค้นหารอบรถไฟ ===== -->
@@ -101,8 +107,8 @@
       <h2>ข่าวประชาสัมพันธ์</h2>
       <div class="news-grid">
         <!-- ข่าวที่ 1 -->
-        <div class="news-card">
-          <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&q=80&w=800"
+        <div class="news-card animate-on-scroll">
+          <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&amp;fit=crop&amp;q=80&amp;w=800"
             alt="ข่าวปิดเส้นทางคลองมะพลับ">
           <div class="news-info">
             <h3>ประกาศปิดเส้นทางระหว่างสถานี คลองมะพลับ-สวรรคโลก<br>(เป็นการชั่วคราว)</h3>
@@ -110,7 +116,7 @@
           </div>
         </div>
         <!-- ข่าวที่ 2 -->
-        <div class="news-card">
+        <div class="news-card animate-on-scroll">
           <img src="images.jpg" alt="ข่าวปิดเส้นทางสายสุพรรณบุรี">
           <div class="news-info">
             <h3>ประกาศปิดเส้นทางสายสุพรรณบุรี<br>(เป็นการชั่วคราว)</h3>
@@ -153,8 +159,46 @@
     </div>
   </footer>
 
+  <!-- ===== Mobile Nav Overlay ===== -->
+  <div class="mobile-nav-overlay" id="mobileNav">
+    <div class="mobile-nav-panel">
+      <!-- Header ใน panel: โลโก้ + ปุ่มปิด -->
+      <div class="mobile-nav-header">
+        <div class="mobile-nav-header-logo">
+          <i class="fa-solid fa-train-subway"></i>
+          RotFaiCheck
+        </div>
+        <button class="mobile-nav-close-btn" id="mobileNavClose">&times;</button>
+      </div>
+      <!-- รายการเมนู -->
+      <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-link active">
+          <i class="fa-solid fa-house"></i> หน้าแรก
+        </a>
+        <a href="schedule.html" class="mobile-nav-link">
+          <i class="fa-solid fa-calendar-days"></i> ตารางเวลา
+        </a>
+        <a href="station.html" class="mobile-nav-link">
+          <i class="fa-solid fa-train-subway"></i> สถานีรถไฟ
+        </a>
+        <a href="fare.html" class="mobile-nav-link">
+          <i class="fa-solid fa-ticket"></i> อัตราค่าโดยสาร
+        </a>
+        <a href="contact.html" class="mobile-nav-link">
+          <i class="fa-solid fa-phone"></i> ติดต่อเรา
+        </a>
+      </div>
+      <!-- Footer ใน panel -->
+      <div class="mobile-nav-footer">
+        <i class="fa-solid fa-phone-volume"></i> สายด่วนรถไฟ 1690
+      </div>
+    </div>
+  </div>
+
   <!-- ===== โหลดฐานข้อมูลสมมติ ===== -->
   <script src="data.js"></script>
+  <!-- ===== โหลด main.js (hamburger + animations) ===== -->
+  <script src="main.js"></script>
 
   <script>
     /* ============================================================

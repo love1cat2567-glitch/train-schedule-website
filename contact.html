@@ -1,13 +1,66 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RotFaiCheck - ติดต่อเรา</title>
+  <title>RotFaiCheck - ติดต่อเรา | ส่งข้อความและฟีดแบค</title>
+  <meta name="description" content="ติดต่อ RotFaiCheck ส่งข้อความ แจ้งปัญหา หรือให้ฟีดแบค Call Center 1690">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- โหลด Supabase Client Library (JS SDK v2) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    /* ============================================================
+       สไตล์เพิ่มเติมสำหรับฟอร์มที่ส่งข้อมูลจริง
+       ============================================================ */
+
+    /* ข้อความแจ้งสถานะ success / error */
+    .form-alert {
+      display: none;
+      /* ซ่อนไว้ก่อน แสดงเมื่อส่งฟอร์มแล้ว */
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .form-alert.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .form-alert.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* ปุ่มขณะกำลังส่ง — ทำให้ดูเป็น loading */
+    .btn-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* required field marker */
+    .required-mark {
+      color: #831b2d;
+      margin-left: 3px;
+    }
+
+    /* Label style ชัดขึ้น */
+    .contact-form label {
+      font-weight: 600;
+    }
+  </style>
 </head>
+
 <body>
+  <!-- ===== HEADER ===== -->
   <header>
     <a href="index.html" class="logo">
       <i class="fa-solid fa-train-subway logo-icon"></i>
@@ -21,14 +74,21 @@
       <a href="fare.html">อัตราค่าโดยสาร</a>
       <a href="contact.html" class="active">ติดต่อเรา</a>
     </nav>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="เปิดเมนู">
+      <span></span><span></span><span></span>
+    </button>
   </header>
 
+  <!-- ===== MAIN CONTENT ===== -->
   <main>
     <div class="contact-container">
+
+      <!-- ===== คอลัมน์ซ้าย: ข้อมูลติดต่อ ===== -->
       <div class="contact-left">
         <h2 style="margin-bottom: 20px;">ข้อมูลติดต่อด่วน</h2>
-        
-        <div class="contact-box">
+
+        <!-- โทรศัพท์ -->
+        <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
           <div>
             <div style="font-weight: 500;">สายด่วน Call Center</div>
@@ -36,7 +96,8 @@
           </div>
         </div>
 
-        <div class="contact-box">
+        <!-- อีเมล -->
+        <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
           <div>
             <div style="font-weight: 500;">อีเมล :</div>
@@ -44,7 +105,8 @@
           </div>
         </div>
 
-        <div class="contact-box">
+        <!-- Facebook -->
+        <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-brands fa-facebook-f"></i></div>
           <div>
             <div style="font-weight: 500;">Facebook</div>
@@ -52,7 +114,8 @@
           </div>
         </div>
 
-        <div class="contact-box">
+        <!-- LINE -->
+        <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-brands fa-line"></i></div>
           <div>
             <div style="font-weight: 500;">LINE</div>
@@ -60,7 +123,8 @@
           </div>
         </div>
 
-        <div class="contact-box">
+        <!-- Instagram -->
+        <div class="contact-box animate-on-scroll">
           <div class="contact-icon"><i class="fa-brands fa-instagram"></i></div>
           <div>
             <div style="font-weight: 500;">Instagram</div>
@@ -69,27 +133,53 @@
         </div>
       </div>
 
+      <!-- ===== คอลัมน์ขวา: ฟอร์มส่งข้อความ (เชื่อมกับ Supabase Database) ===== -->
       <div class="contact-right">
-        <h2 style="margin-bottom: 20px;">ฟอร์มส่งข้อความ</h2>
-        <form class="contact-form">
-          <label>ชื่อ</label>
-          <input type="text" placeholder="">
-          
-          <label>อีเมล</label>
-          <input type="email" placeholder="">
-          
+        <h2 style="margin-bottom: 20px;">ฟอร์มส่งข้อความ / ฟีดแบค</h2>
+
+        <!-- ข้อความแจ้งผล (ซ่อนไว้ก่อน) -->
+        <div id="formAlert" class="form-alert"></div>
+
+        <form class="contact-form" id="contactForm">
+
+          <!-- ชื่อ (บังคับ) -->
+          <label>
+            ชื่อ-นามสกุล
+            <span class="required-mark">*</span>
+          </label>
+          <input type="text" id="inputName" placeholder="กรอกชื่อ-นามสกุลของท่าน" required>
+
+          <!-- อีเมล (บังคับ) -->
+          <label>
+            อีเมล
+            <span class="required-mark">*</span>
+          </label>
+          <input type="email" id="inputEmail" placeholder="example@email.com" required>
+
+          <!-- เบอร์โทร -->
           <label>เบอร์โทรศัพท์</label>
-          <input type="text" placeholder="">
-          
-          <label>เรื่องที่ต้องการติดต่อ</label>
-          <textarea placeholder=""></textarea>
-          
-          <button type="button" class="btn-submit">ส่งข้อความ</button>
+          <input type="text" id="inputPhone" placeholder="0XX-XXX-XXXX (ไม่บังคับ)">
+
+          <!-- หัวข้อ -->
+          <label>
+            เรื่องที่ต้องการติดต่อ
+            <span class="required-mark">*</span>
+          </label>
+          <textarea id="inputMessage" placeholder="อธิบายเรื่องที่ต้องการติดต่อ หรือให้ฟีดแบคเกี่ยวกับเว็บไซต์..."
+            required></textarea>
+
+          <!-- ปุ่มส่ง -->
+          <button type="button" class="btn-submit" id="btnSubmit" onclick="submitFeedback()">
+            <i class="fa-solid fa-paper-plane"></i> ส่งข้อความ
+          </button>
+
         </form>
       </div>
+
     </div>
   </main>
 
+  <!-- ===== FOOTER ===== -->
   <footer>
     <div class="footer-content">
       <div class="footer-col">
@@ -120,5 +210,146 @@
       &copy; 2024 Rotfaicheck, All Rights Reserved.
     </div>
   </footer>
+
+  <script>
+    /* ============================================================
+       contact.js (inline) — ระบบส่งฟอร์มไปบันทึกใน Supabase Database
+       ============================================================
+       วิธีตั้งค่า Supabase:
+       1. สร้าง Project ใน Supabase Dashboard
+       2. คัดลอก Project URL และ anon / public Key มาใส่ด้านล่าง
+       3. ดูวิธีตั้งค่าตาราง feedbacks ได้ที่ไฟล์ SETUP_SUPABASE.md
+       ============================================================ */
+
+    /**
+     * ตั้งค่า Supabase API Key (ต้องนำค่านำมาจาก Supabase Dashboard -> Project Settings -> API)
+     */
+    const SUPABASE_URL = 'https://gjljbgxrvtvloavzpvnz.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_JWrXjFuBpPdSmb9jvADDeQ_NWhSu2W6';
+
+    // สร้าง Supabase client instance
+    let supabaseClient = null;
+    if (typeof supabase !== 'undefined' && SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE') {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    /**
+     * ฟังก์ชันส่งฟอร์ม — เรียกเมื่อกดปุ่ม "ส่งข้อความ"
+     */
+    async function submitFeedback() {
+      /* -- ดึงค่าจากฟอร์ม -- */
+      const name = document.getElementById('inputName').value.trim();
+      const email = document.getElementById('inputEmail').value.trim();
+      const phone = document.getElementById('inputPhone').value.trim();
+      const message = document.getElementById('inputMessage').value.trim();
+
+      /* -- Validation: ตรวจสอบช่องที่บังคับกรอก -- */
+      if (!name || !email || !message) {
+        showAlert('กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบ', 'error');
+        return;
+      }
+
+      /* -- Validation: ตรวจสอบรูปแบบอีเมล -- */
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        showAlert('รูปแบบอีเมลไม่ถูกต้อง', 'error');
+        return;
+      }
+
+      /* -- ตรวจสอบว่าตั้งค่า Supabase URL และ Key หรือยัง -- */
+      if (SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE' || !supabaseClient) {
+        /* กรณียังไม่ได้ใส่ Key — แสดง Demo Mode */
+        console.log('=== ข้อมูลฟีดแบค (ยังไม่ได้ตั้งค่า Supabase Keys) ===');
+        console.log({ name, email, phone, message });
+        showAlert(
+          '✅ รับข้อมูลแล้ว! (Demo Mode — ยังไม่ได้ตั้งค่า Supabase URL & Key)\n' +
+          'ดูวิธีตั้งค่า Supabase ได้ที่ไฟล์ SETUP_SUPABASE.md',
+          'success'
+        );
+        resetForm();
+        return;
+      }
+
+      /* -- เปลี่ยนปุ่มเป็น Loading state -- */
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่ง...';
+
+      try {
+        // ส่งข้อมูลเข้าตาราง `feedbacks` ใน Supabase
+        const { data, error } = await supabaseClient
+          .from('feedbacks')
+          .insert([
+            {
+              name: name,
+              email: email,
+              phone: phone || null,
+              message: message
+            }
+          ]);
+
+        if (error) {
+          throw error;
+        }
+
+        /* ส่งสำเร็จ */
+        showAlert('✅ ส่งข้อความสำเร็จ! ข้อมูลถูกบันทึกลงระบบ Supabase เรียบร้อยแล้ว', 'success');
+        resetForm();
+
+      } catch (err) {
+        console.error('Supabase Error:', err);
+        showAlert('❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + (err.message || 'โปรดลองใหม่อีกครั้ง'), 'error');
+      } finally {
+        /* คืนสถานะปุ่มกลับมาปกติ */
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ส่งข้อความ';
+      }
+    }
+
+    /**
+     * แสดงข้อความแจ้งผล (success หรือ error)
+     */
+    function showAlert(msg, type) {
+      const alertBox = document.getElementById('formAlert');
+      alertBox.textContent = msg;
+      alertBox.className = `form-alert ${type}`;
+      alertBox.style.display = 'block';
+
+      setTimeout(function () {
+        alertBox.style.display = 'none';
+      }, 6000);
+    }
+
+    /**
+     * ล้างข้อมูลในฟอร์มทั้งหมดหลังส่งสำเร็จ
+     */
+    function resetForm() {
+      document.getElementById('inputName').value = '';
+      document.getElementById('inputEmail').value = '';
+      document.getElementById('inputPhone').value = '';
+      document.getElementById('inputMessage').value = '';
+    }
+  </script>
+
+  <!-- ===== Mobile Nav Overlay ===== -->
+  <div class="mobile-nav-overlay" id="mobileNav">
+    <div class="mobile-nav-panel">
+      <div class="mobile-nav-header">
+        <div class="mobile-nav-header-logo"><i class="fa-solid fa-train-subway"></i> RotFaiCheck</div>
+        <button class="mobile-nav-close-btn" id="mobileNavClose">&times;</button>
+      </div>
+      <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-link"><i class="fa-solid fa-house"></i> หน้าแรก</a>
+        <a href="schedule.html" class="mobile-nav-link"><i class="fa-solid fa-calendar-days"></i> ตารางเวลา</a>
+        <a href="station.html" class="mobile-nav-link"><i class="fa-solid fa-train-subway"></i> สถานีรถไฟ</a>
+        <a href="fare.html" class="mobile-nav-link"><i class="fa-solid fa-ticket"></i> อัตราค่าโดยสาร</a>
+        <a href="contact.html" class="mobile-nav-link active"><i class="fa-solid fa-phone"></i> ติดต่อเรา</a>
+      </div>
+      <div class="mobile-nav-footer"><i class="fa-solid fa-phone-volume"></i> สายด่วนรถไฟ 1690</div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
 </body>
+
 </html>
